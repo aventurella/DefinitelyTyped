@@ -932,9 +932,6 @@ declare namespace Marionette {
          * aren't provided the CollectionView will default to passing the
          * childViewOptions to the emptyView.
          */
-
-
-
         emptyViewOptions: (model: Backbone.Model, index: number) => any | any;
 
         /**
