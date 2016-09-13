@@ -1388,8 +1388,6 @@ declare namespace Marionette {
         /** Deprecated! nstead of using the Application as the root of your view tree, you should use a Layout View.*/
         getRegion(regionName: string): Region;
 
-        module(moduleNames: any, moduleDefinition: any): Module;
-
         /**
          * Called just before the Application starts and before the initializers are executed.
          */
@@ -1399,20 +1397,6 @@ declare namespace Marionette {
          * Called after the Application has started and after the initializers have been executed.
          */
         onStart(options?: any): void;
-    }
-
-    // modules mapped for convenience, but you should probably use TypeScript modules instead
-    class Module extends Backbone.Events {
-
-        constructor(moduleName: string, app: Application);
-
-        submodules: any;
-        triggerMethod(name: string, ...args: any[]): any;
-
-        addInitializer(callback: any): void;
-        addFinalizer(callback: any): void;
-        start(options?: any): void;
-        addDefinition(moduleDefinition: any, customArgs: any): any;
     }
 
     /**
