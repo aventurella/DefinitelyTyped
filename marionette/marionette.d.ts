@@ -845,6 +845,22 @@ declare namespace Marionette {
 
     interface CollectionViewOptions<TModel extends Backbone.Model> extends Backbone.ViewOptions<TModel> {
 
+        behaviors?: any;
+        childView?: any;
+        childViewEventPrefix?: string;
+        childViewEvents?: any;
+        childViewOptions?: any;
+        childViewTriggers?: any;
+        collectionEvents?: any;
+        events?: any;
+        filter?: any;
+        emptyView?: any;
+        emptyViewOptions?: any;
+        modelEvents?: any;
+        triggers?: any;
+        ui?: any;
+        viewComparator?: any;
+
         /**
          * By default the CollectionView will maintain a sorted collection's order
          * in the DOM. This behavior can be disabled by specifying {sort: false}
