@@ -167,12 +167,6 @@ declare namespace Marionette {
      */
     function unbindEntityEvents(target: any, entity: any, bindings: any): void;
 
-    class Callbacks {
-        add(callback: Function, contextOverride: any): void;
-        run(options: any, context: any): void;
-        reset(): void;
-    }
-
     /**
      * A base class which other classes can extend from. Object incorporates many
      * backbone conventions and utilities like initialize and Backbone.Events.
