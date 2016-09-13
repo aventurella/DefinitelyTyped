@@ -1018,13 +1018,6 @@ declare namespace Marionette {
         attachHtml(collectionView: CollectionView<TModel, TView>, childView: TView, index: number): void;
 
         /**
-         * The value returned by this method is the ChildView class that will be
-         * instantiated when a Model needs to be initially rendered. This method
-         * also gives you the ability to customize per Model ChildViews.
-         */
-        getChildView<M extends Backbone.Model>(item: M): new (...args:any[]) => TView;
-
-        /**
          * If you need the emptyView's class chosen dynamically, specify
          * getEmptyView.
          */
