@@ -923,7 +923,7 @@ declare namespace Marionette {
          * the list of childViews, you can specify an emptyView attribute on your collection
          * view.
          */
-        emptyView: () => Backbone.View<any> | any;
+        emptyView: () => new (...args:any[]) => Backbone.View<any> | any;
 
         /**
          * Similar to childView and childViewOptions, there is an emptyViewOptions
