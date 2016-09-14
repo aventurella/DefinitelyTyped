@@ -18,7 +18,6 @@ declare namespace Marionette {
         remove(view: BaseView): void;
 
         // mixins from underscore (copied from underscore)
-
         all(iterator: (element: BaseView, index: number) => boolean, context?: any): boolean;
         any(iterator: (element: BaseView, index: number) => boolean, context?: any): boolean;
         contains(value: any): boolean;
