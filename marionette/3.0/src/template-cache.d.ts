@@ -5,10 +5,12 @@ declare namespace Marionette{
      * in your HTML. This will improve the speed of subsequent calls to get a template.
      */
     class TemplateCache {
+        static templateCaches: any;
+
         /**
          * To use the TemplateCache, call the get method on TemplateCache directly. Internally, instances of the TemplateCache class will be created and stored but you do not have to manually create these instances yourself. get will return a compiled template function.
          */
-        static get(templateId: string): any;
+        static get(templateId: string, options: any): any;
 
         /**
          * You can clear one or more, or all items from the cache using the clear
@@ -16,22 +18,28 @@ declare namespace Marionette{
          * from the DOM the next time it is retrieved.
          * @param  the templateId used for loading / caching of the templates to clear. If none specified, all templates will be cleared from the cache.
          */
-        static clear(...templateId: string[]): void;
+        static clear(...args: string[]): void;
 
         /**
-         * The default template retrieval is to select the template contents from the
-         * DOM using jQuery. If you wish to change the way this works, you can
-         * override this method on the TemplateCache object.
+         * Internal method to load the template
          */
-        loadTemplate(templateId: string): any;
+        load(options): any
 
         /**
-         * he default template compilation passes the results from loadTemplate to
-         * the compileTemplate function, which returns an underscore.js compiled
-         * template function. When overriding compileTemplate remember that it
-         * must return a function which takes an object of parameters and values
-         * and returns a formatted HTML string.
+         * Load a template from the DOM, by default. Override
+         * this method to provide your own template retrieval
+         * For asynchronous loading with AMD/RequireJS, consider
+         * using a template-loader plugin as described here:
+         * https://github.com/marionettejs/backbone.marionette/wiki/Using-marionette-with-requirejs
          */
-        compileTemplate(rawTemplate: any): any;
+        loadTemplate(templateId: string, options: any): any;
+
+        /**
+         * Pre-compile the template before caching it. Override
+         * this method if you do not need to pre-compile a template
+         * (JST / RequireJS for example) or if you want to change
+         * the template engine used (Handebars, etc).
+         */
+        compileTemplate(rawTemplate: any, options: any): any;
     }
 }
