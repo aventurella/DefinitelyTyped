@@ -1,4 +1,4 @@
-/// <reference path="marionette.d.ts" />
+/// <reference path="./src/index.d.ts" />
 
 namespace Marionette.Tests {
     // class DestroyWarn extends Marionette.Behavior {
@@ -329,7 +329,10 @@ namespace Marionette.Tests {
     }
 
     function ContainerTests(){
-        let f = new Foo({model: null});
+        let model = new AModel();
+
+        let f = new Foo({model});
         let container = new Marionette.Container([f]);
+        let view = <Foo>container.findByModel(model)
     }
 }
