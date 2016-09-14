@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "dts-bundle": "^0.5.0",
+    "dts-generator": "^1.7.0",
+    "typescript": "^1.8.10"
+  }
+}

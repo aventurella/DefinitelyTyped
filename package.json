@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "definition-tester": "0.5.2",
+    "dts-generator": "^1.7.0",
     "typescript": "1.8.7"
   }
 }
