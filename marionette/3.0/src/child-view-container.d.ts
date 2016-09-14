@@ -1,7 +1,6 @@
 /// <reference path="../../../backbone/backbone.d.ts" />
 
 
-
 declare namespace Marionette {
     type BaseView = Marionette.View<Backbone.Model>
 
