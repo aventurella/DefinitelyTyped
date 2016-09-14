@@ -21,7 +21,7 @@ declare namespace Marionette {
     var FEATURES: any;
     var VERSION: string;
 
-    interface ViewOptions {
+    interface BaseOptions {
       el?: any;
       events?: {[selector: string]: string};
       id?: string;
@@ -30,11 +30,11 @@ declare namespace Marionette {
       attributes?: {[id: string]: any};
     }
 
-    interface CollectionOptions<TModel extends Backbone.Model> extends ViewOptions {
+    interface CollectionOptions<TModel extends Backbone.Model> extends BaseOptions {
         collection?: Backbone.Collection<any>;
     }
 
-    interface ModelOptions<TModel extends Backbone.Model> extends ViewOptions {
+    interface ModelOptions<TModel extends Backbone.Model> extends BaseOptions {
       model?: TModel;
     }
 
