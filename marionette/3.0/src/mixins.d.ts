@@ -2,11 +2,11 @@
 /// <reference path="./view.d.ts" />
 declare namespace Marionette{
 
-    interface BehaviorMixins{
+    interface BehaviorMixin{
 
     }
 
-    interface CommonMixins{
+    interface CommonMixin{
         normalizeMethods(hash: string): {[key: string]: any};
         mergeOptions(options: any, keys: any): any;
         getOption(optionName: string): any;
@@ -14,11 +14,11 @@ declare namespace Marionette{
         unbindEvents(entity: any, bindings: any): any
     }
 
-    interface DelegateEntityEventMixins{
+    interface DelegateEntityEventsMixin {
 
     }
 
-    interface RadioMixins{
+    interface RadioMixin{
         bindRequests(channel: any, bindings: any): any;
         unbindRequests(channel: any, bindings: any): any;
         bindEvents(entity: any, bindings: any): any;
@@ -26,7 +26,7 @@ declare namespace Marionette{
         getChannel(): any;
     }
 
-    interface RegionMixins{
+    interface RegionMixin{
         addRegion(name: string, definition: Region): any
         addRegions(regions: Region[]): any
         removeRegion(name: string): any;
@@ -39,16 +39,16 @@ declare namespace Marionette{
         getChildView<T extends View<Backbone.Model>>(name: string): T;
     }
 
-    interface TriggerMixins{
+    interface TriggersMixin{
 
     }
 
-    interface UIMixins{
+    interface UIMixin{
         normalizeUIKeys(hash: {[key: string]: string}): any;
         normalizeUIValues(hash: {[key: string]: string}, properties: any)
     }
 
-    interface ViewMixins{
+    interface ViewMixin{
         supportsRenderLifecycle: boolean;
         supportsDestroyLifecycle: boolean;
         setElement(): this;
