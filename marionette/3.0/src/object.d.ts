@@ -12,7 +12,7 @@ declare namespace Marionette{
      * A base class which other classes can extend from. Object incorporates many
      * backbone conventions and utilities like initialize and Backbone.Events.
      */
-    class Object extends Backbone.Events implements CommonMixins, RadioMixins {
+    class Object extends Backbone.Events implements CommonMixin, RadioMixin {
         /**
          * Initialize is called immediately after the Object has been instantiated,
          * and is invoked with the same arguments that the constructor received.

@@ -12,7 +12,7 @@ declare namespace Marionette{
      * single method on another object. Have your routers configured to call
      * the method on your object, directly.
      */
-    class AppRouter extends Backbone.Router implements CommonMixins{
+    class AppRouter extends Backbone.Router implements CommonMixin {
 
         /**
          * Configure an AppRouter with appRoutes. The route definition
