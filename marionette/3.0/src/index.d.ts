@@ -17,6 +17,9 @@
 
 
 declare namespace Marionette {
+    var DEV_MODE: boolean;
+    var FEATURES: any;
+    var VERSION: string;
 
     interface ViewOptions {
       el?: any;
