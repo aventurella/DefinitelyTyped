@@ -2,141 +2,114 @@
 
 
 declare namespace Marionette{
+    interface ViewOptions<T extends Backbone.Model> extends ModelOptions<T>{
+        behaviors?: any
+        childViewEventPrefix?: any
+        childViewEvents?: any
+        childViewTriggers?: any
+        collectionEvents?: any
+        events?: any
+        modelEvents?: any
+        regionClass?: any
+        regions?: any
+        template?: any
+        templateContext?: any
+        triggers?: any
+        ui?: any
+    }
+
     /**
-     * This base view provides some common and core functionality for other views
-     * to take advantage of.
-     * Note: The Marionette.View class is not intended to be used directly. It
-     * exists as a base view for other view classes to be extended from, and to
-     * provide a common location for behaviors that are shared across all views.
+     * The standard view. Includes view events, automatic rendering
+     * of Underscore templates, nested views, and more.
      */
-    class View<TModel extends Backbone.Model> extends Backbone.View<TModel> {
+    class View<TModel extends Backbone.Model> extends Backbone.View<TModel> implements ViewMixin, RegionMixin {
 
-        constructor(options?: Backbone.ViewOptions<TModel>);
+        constructor(options?: ViewOptions<TModel>);
+
+        // ViewMixin
+        supportsRenderLifecycle: boolean;
+        supportsDestroyLifecycle: boolean;
+        setElement(): this;
+        delegateEvents(eventsArg: any): this;
+        getTriggers(): any;
+        delegateEntityEvents(): this;
+        undelegateEntityEvents(): this;
+        destroy(...args: any[]): this;
+        bindUIElements(): this;
+        unbindUIElements(): this;
+        getUI(name: string): any;
+        childViewEventPrefix: string;
+        triggerMethod(event: string, ...args: any[]): any;
+
+        // RegionMixin
+        addRegion(name: string, definition: Region): any
+        addRegions(regions: Region[]): any
+        removeRegion(name: string): any;
+        removeRegions(): Region[];
+        emptyRegions(): Region[];
+        hasRegion(name: string): boolean;
+        getRegion(name: string): Region;
+        getRegions(): Region[];
+        showChildView(name: string, view: View<Backbone.Model>, ...args: any[]);
+        getChildView<T extends View<Backbone.Model>>(name: string): T;
+
+        serializeData(): any;
 
         /**
-         * Defines behaviors attached to this view.
+         * Prepares the special `model` property of a view
+         * for being displayed in the template. By default
+         * we simply clone the attributes. Override this if
+         * you need a custom transformation for your view's model
          */
-        behaviors: any;
+        serializeModel(): any;
 
         /**
-         * Defines `triggers` to forward DOM events to view
-         * events. `triggers: {"click .foo": "do:foo"}`
+         * Serialize a collection by cloning each of
+         * it's model's attributes
          */
-        triggers:{[key:string]:any};
+        serializeCollection(): any;
 
         /**
-         * A configuration hash for models. The left side is the event on
-         * the model, and the right side is the name of the
-         * method on the view or a function to handle the event. This property
-         * can also be a function that returns the hash described above.
+         * Render the view, defaulting to underscore.js templates.
+         * You can override this in your view definition to provide
+         * a very specific rendering for your view. In general, though,
+         * you should override the `Marionette.Renderer` object to
+         * change how Marionette renders views.
+         * Subsequent renders after the first will re-render all nested views.
          */
-        modelEvents: any;
+        render(): this;
 
         /**
-         * A configuration hash for collections. The left side is the event on
-         * the collection, and the right side is the name of the
-         * method on the view or a function to handle the event. This property
-         * can also be a function that returns the hash described above.
-         */
-        collectionEvents: any;
-
-        /**
-         * In several cases you need to access ui elements inside the view to
-         * retrieve their data or manipulate them. For example you have a certain
-         * div element you need to show/hide based on some state, or other ui
-         * element that you wish to set a css class to it. Instead of having
-         * jQuery selectors hanging around in the view's code you can define a
-         * ui hash that contains a mapping between the ui element's name and its
-         * jQuery selector. Afterwards you can simply access it via
-         * this.ui.elementName.
-         */
-        ui: any;
-
-        /**
-         * There may be some cases where you need to change the template that is
-         * used for a view, based on some simple logic such as the value of a
-         * specific attribute in the view's model. To do this, you can provide a
-         * getTemplate function on your views and use this to return the template
-         * that you need.
+         * Get the template for this view
+         * instance. You can set a `template` attribute in the view
+         * definition or pass a `template: "whatever"` parameter in
+         * to the constructor options.
          */
         getTemplate(): any;
 
+        /**
+         * Mix in template context methods. Looks for a
+         * `templateContext` attribute, which can either be an
+         * object literal, or a function that returns an object
+         * literal. All methods and attributes from this object
+         * are copies to the object passed in.
+         */
+        mixinTemplateContext(): any;
 
         /**
-         * Retrieve an object's attribute either directly from the object, or
-         * from the object's this.options, with this.options taking precedence.
+         * Attaches the content of a given view.
+         * This method can be overridden to optimize rendering,
+         * or to render in a non standard way.
+         *
+         * For example, using `innerHTML` instead of `$el.html`
+         *
+         * ```js
+         * attachElContent(html) {
+         *   this.el.innerHTML = html;
+         *   return this;
+         * }
+         * ```
          */
-        getOption<T>(optionName:string): T;
-
-        mixinTemplateHelpers(target?: any): any;
-        configureTriggers(): any;
-
-        /**
-         * View implements a destroy method, which is called by the region managers automatically. As part of the implementation.
-         */
-        destroy(...args: any[]): void;
-
-        /**
-         * In several cases you need to access ui elements inside the view to
-         * retrieve their data or manipulate them. For example you have a certain
-         * div element you need to show/hide based on some state, or other ui
-         * element that you wish to set a css class to it. Instead of having jQuery
-         * selectors hanging around in the view's code you can define a ui hash
-         * that contains a mapping between the ui element's name and its jQuery
-         * selector. Afterwards you can simply access it via this.ui.elementName.
-         * This functionality is provided via the bindUIElements method.
-         * Since View doesn't implement the render method, then if you directly
-         * extend from View you will need to invoke this method from your render
-         * method. In ItemView and CompositeView this is already taken care of.
-         */
-        bindUIElements(): any;
-
-        unbindUIElements(): any;
-
-        triggerMethod(name: string, ...args: any[]): any;
-
-        /**
-         * Called on the view instance when the view has been rendered and
-         * displayed. This event can be used to react to when a view has been
-         * shown via a region. A common use case for the onShow method is to
-         * use it to add children views.
-         */
-        onShow(): void;
-
-        /**
-         * Triggered just after the view has been destroyed.
-         */
-        onDestroy(): void;
-
-        /**
-         * When destroying a view, an onBeforeDestroy method will be called, if
-         * it has been provided, just before the view destroys. It will be passed
-         * any arguments that destroy was invoked with.
-         */
-        onBeforeDestroy(...args: any[]): void;
-
-        /**
-         * Called anytime that showing the view in a Region causes it to be
-         * attached to the document.
-         */
-        onAttach(): void;
-
-        /**
-         * Triggered right before the view is attached to the document.
-         */
-        onBeforeAttach(): void;
-
-        /**
-         * Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been re-rendered.
-         * This event / callback is useful for DOM-dependent UI plugins such as jQueryUI or KendoUI.
-         */
-        onDomRefresh(): void;
-
-        /**
-         * Internal properties extended in Marionette.View.
-         */
-        isDestroyed: boolean;
-        supportsRenderLifecycle: boolean;
-        supportsDestroyLifecycle: boolean;
+        attachElContent(html: any): this;
     }
 }
