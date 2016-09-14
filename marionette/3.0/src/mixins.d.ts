@@ -1,5 +1,3 @@
-/// <reference path="./region.d.ts" />
-/// <reference path="./view.d.ts" />
 declare namespace Marionette{
 
     interface BehaviorMixin{

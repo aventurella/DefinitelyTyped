@@ -1,5 +1,3 @@
-/// <reference path="./object.d.ts" />
-
 declare namespace Marionette {
 
     interface RegionShowOptions {
