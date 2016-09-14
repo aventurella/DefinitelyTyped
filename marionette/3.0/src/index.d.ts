@@ -33,7 +33,8 @@ declare namespace Marionette {
     }
 
     interface CollectionOptions<TModel extends Backbone.Model> extends BaseOptions {
-        collection?: Backbone.Collection<any>;
+        collection?: Backbone.Collection<TModel>;
+        model?: Backbone.Model;
     }
 
     interface ModelOptions<TModel extends Backbone.Model> extends BaseOptions {
