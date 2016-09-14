@@ -6,14 +6,16 @@
 /// <reference path="../../../backbone/backbone.d.ts" />
 /// <reference path="./application.d.ts" />
 /// <reference path="./app-router.d.ts" />
-/// <reference path="./child-view-container.d.ts" />
-/// <reference path="./object.d.ts" />
-/// <reference path="./region.d.ts" />
 /// <reference path="./behavior.d.ts" />
-/// <reference path="./template-cache.d.ts" />
-/// <reference path="./view.d.ts" />
+/// <reference path="./child-view-container.d.ts" />
 /// <reference path="./collection-view.d.ts" />
 /// <reference path="./composite-view.d.ts" />
+/// <reference path="./error.d.ts" />
+/// <reference path="./mixins.d.ts" />
+/// <reference path="./object.d.ts" />
+/// <reference path="./region.d.ts" />
+/// <reference path="./template-cache.d.ts" />
+/// <reference path="./view.d.ts" />
 
 
 declare namespace Marionette {
@@ -38,77 +40,21 @@ declare namespace Marionette {
       model?: TModel;
     }
 
-    /**
-     * Retrieve an object's attribute either directly from the object, or
-     * from the object's this.options, with this.options taking precedence.
-     */
-    function getOption(target: any, optionName: string): any;
-
-    /**
-     * Trigger an event and a corresponding method on the target object.
-     * All arguments that are passed to the triggerMethod call are passed along
-     * to both the event and the method, with the exception of the event name not
-     * being passed to the corresponding method.
-     */
-    function triggerMethod(name: string, ...args: any[]): any;
-
-    /**
-     * Invoke triggerMethod on a specific context.
-     * This is useful when it's not clear that the object has triggerMethod defined.
-     */
-    function triggerMethodOn(ctx: any, name: string, ...args: any[]): any;
-
-    /**
-     * Monitor a view's state, and after it has been rendered and shown in the DOM,
-     * trigger a "dom:refresh" event every time it is re-rendered.
-     */
-    function MonitorDOMRefresh(view: Backbone.View<Backbone.Model>): void;
-
-    /**
-     * This method is used to bind a backbone "entity" (collection/model) to methods on a target object.
-     * @param target An object that must have a listenTo method from the EventBinder object.
-     * @param entity The entity (Backbone.Model or Backbone.Collection) to bind the events from.
-     * @param bindings a hash of { "event:name": "eventHandler" } configuration. Multiple handlers can be separated by a space. A function can be supplied instead of a string handler name.
-     */
-    function bindEntityEvents(target: any, entity: any, bindings: any): void;
-
-    /**
-     * This method can be used to unbind callbacks from entities' (collection/model) events. It's the opposite of bindEntityEvents
-     * @param target An object that must have a listenTo method from the EventBinder object.
-     * @param entity The entity (Backbone.Model or Backbone.Collection) to bind the events from.
-     * @param bindings a hash of { "event:name": "eventHandler" } configuration. Multiple handlers can be separated by a space. A function can be supplied instead of a string handler name.
-     */
-    function unbindEntityEvents(target: any, entity: any, bindings: any): void;
-
-
-    interface RegionDefaults {
-        /**
-         * A selector string indicating which element to assign the region two.
-         */
-        selector?: string;
-
-        /**
-         * A selector string, a jQuery object, or an HTML node indicating which element
-         * the region should use.
-         */
-        el?: any;
-
-        /**
-         * A custom region class.
-         */
-        regionClass?: any;
-
-        /**
-         * Ordinarily regions enforce the presence of a backing DOM element. In
-         * some instances it may be desirable to allow regions to be instantiated
-         * and used without an element, such as when regions defined by a parent
-         * LayoutView class are used by only some of its subclasses. In these
-         * instances, the region can be defined with this option set to true,
-         * suppressing the missing element error and causing show calls to the
-         * region to be treated as no-ops.
-         */
-        allowMissingEl?: boolean;
-    }
+    function bindEvents(context: any, entity: any, bindings: any): any;
+    function unbindEvents(context: any, entity: any, bindings: any): any;
+    function bindRequests(context: any, channel: any, bindings: any): any;
+    function unbindRequests(context: any, channel: any, bindings: any): any;
+    function mergeOptions(context: any, options: any, keys: any): any;
+    function getOption(context: any, optionName: string): any;
+    function normalizeMethods(context: any): any;
+    function extend(properties: any, classProperties?: any): any;
+    function isNodeAttached(el: any): boolean;
+    function deprecate(message: string | {prev: string, next: string, url: string}, test: boolean): any;
+    function triggerMethod(context: any, event: string, ...args: any[]): any;
+    function triggerMethodOn(context: any, event: string, ...args: any[]): any;
+    function isEnabled(name: string): boolean;
+    function setEnabled(name: string, state: any): void;
+    function monitorViewEvents(view: any): any;
 
     /**
      * The Renderer object was extracted from the ItemView rendering process, in
@@ -133,6 +79,5 @@ declare namespace Marionette {
 
 declare module 'backbone.marionette' {
     import Backbone = require('backbone');
-
     export = Marionette;
 }
