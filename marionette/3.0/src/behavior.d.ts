@@ -1,72 +1,52 @@
 /// <reference path="./object.d.ts" />
 
 declare namespace Marionette{
+
+    interface BehaviorOptions{
+        collectionEvents?: any;
+        events?: any;
+        modelEvents?: any;
+        triggers?: any;
+        ui?: any;
+    }
+
     /**
-     * A Behavior is an isolated set of DOM / user interactions that can be mixed
-     * into any View or another Behavior. Behaviors allow you to blackbox View
-     * specific interactions into portable logical chunks, keeping your views
-     * simple and your code DRY.
+     * A Behavior is an isolated set of DOM /
+     * user interactions that can be mixed into any View.
+     * Behaviors allow you to blackbox View specific interactions
+     * into portable logical chunks, keeping your views simple and your code DRY.
      */
-    class Behavior extends Marionette.Object {
-        constructor(options?: any, view?: any);
-
-        options: any;
-
-        /**
-         * Behaviors can have their own ui hash, which will be mixed into the ui
-         * hash of its associated View instance. ui elements defined on either the
-         * Behavior or the View will be made available within events and triggers.
-         * They also are attached directly to the Behavior and can be accessed within
-         * Behavior methods as this.ui.
-         */
-        ui: any;
-
-        /**
-         * Any triggers you define on the Behavior will be triggered in response to the appropriate event on the view.
-         */
-        triggers: any;
-
-        /**
-         * modelEvents will respond to the view's model events.
-         */
-        modelEvents: any;
-
-        /**
-         * collectionEvents will respond to the view's collection events.
-         */
-        collectionEvents: any;
-
-        /**
-         * The behaviors key allows a behavior to group multiple behaviors
-         * together.
-         */
-        behaviors: any;
-
-        /**
-         * defaults can be a hash or function to define the default options for
-         * your behavior. The default options will be overridden depending on
-         * what you set as the options per behavior (this works just like a
-         * backbone.model).
-         */
+    class Behavior extends Marionette.Object implements DelegateEntityEventsMixin, TriggersMixin, UIMixin {
+        cidPrefix: string;
+        view: any;
         defaults: any;
-
-        /**
-         * el is a direct proxy of the view's el
-         */
+        triggers: any;
+        ui: any;
+        options: any;
         el: any;
-
-        /**
-         * $el is a direct proxy of the view's el cached as a jQuery selector.
-         */
         $el: JQuery;
 
-        /** A reference to the view instance that the behavior is on. */
-        view: any;
+        constructor(options?: any, view?: any);
+
+        // UIMixin
+        normalizeUIKeys(hash: {[key: string]: string}): any;
+        normalizeUIValues(hash: {[key: string]: string}, properties: any)
 
         /**
          * $ is a direct proxy of the views $ lookup method.
          */
         $(selector: any): JQuery;
+
+        destroy(): this;
+        proxyViewProperties(): this;
+        bindUIElements(): this;
+        unbindUIElements(): this;
+        getUI(name: string): any;
+        delegateEntityEvents(): this;
+        undelegateEntityEvents(): this;
+        getEvents(): any;
+        getTriggers(): any;
+
     }
 
     /**
@@ -77,15 +57,27 @@ declare namespace Marionette{
      */
     class Behaviors {
         /**
-         * This method defines where your behavior classes are stored. Override this to provide another lookup.
+         * Placeholder method to be extended by the user.
+         * The method should define the object that stores the behaviors.
+         * i.e.
+         * ```js
+         * Marionette.Behaviors.behaviorsLookup: function() {
+         *     return App.Behaviors
+         * }
+         * ```
+         * _DEPRECATED: The behaviorsLookup is deprecated pending
+         * removal. See the documentation for Behavior to learn how to
+         * map behaviors to views in Marionette 3.
          */
         static behaviorsLookup(): any;
 
         /**
-         * This method has a default implementation that is simple to override. It
-         * is responsible for the lookup of single behavior from within the
-         * Behaviors.behaviorsLookup or elsewhere. Note that it should return the type of the
-         * class to instantiate, not an instance of that class.
+         * Takes care of getting the behavior class
+         * given options and a key.
+         * If a user passes in options.behaviorClass
+         * default to using that.
+         * If a user passes in a Behavior Class directly, use that
+         * Otherwise delegate the lookup to the users `behaviorsLookup` implementation.
          */
         static getBehaviorClass(options: any, key: string): any;
     }
