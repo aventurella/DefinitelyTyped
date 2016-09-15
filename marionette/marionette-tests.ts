@@ -330,7 +330,6 @@ namespace Marionette.Tests {
 
     function ContainerTests(){
         let model = new AModel();
-
         let f = new Foo({model});
         let container = new Marionette.Container([f]);
         let view = <Foo>container.findByModel(model)
