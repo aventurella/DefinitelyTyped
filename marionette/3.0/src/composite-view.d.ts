@@ -1,59 +1,54 @@
 /// <reference path="../../../backbone/backbone.d.ts" />
-/// <reference path="./collection-view.d.ts" />
+
 
 
 declare namespace Marionette{
-    /**
-     * A CompositeView extends from CollectionView to be used as a composite view
-     * for scenarios where it should represent both a branch and leaf in a tree
-     * structure, or for scenarios where a collection needs to be rendered within
-     * a wrapper template.
-     */
-    class CompositeView<TModel extends Backbone.Model, TView extends View<Backbone.Model>> extends CollectionView<TModel, TView> {
-
-        constructor(options?: CollectionViewOptions<TModel>);
-
-        /**
-         * Each childView will be rendered using the childView's template. The
-         * CompositeView's template is rendered and the childView's templates are
-         * added to this.
-         */
-        childView: new (...args:any[]) => TView;
-
-        /**
-         * By default the composite view uses the same attachHtml method that the
-         * collection view provides. This means the view will call jQuery's
-         * .append to move the HTML contents from the child view instance in to
-         * the collection view's el.
-         * This is typically not very useful as a composite view will usually render
-         * a container DOM element in which the child views should be placed.
-         * This can be either a string or a function returning a string.
-         */
+    interface CompositeViewOptions<TModel extends Backbone.Model> extends CollectionOptions<TModel> {
         childViewContainer: any;
+        template: any;
+        templateContext: any;
+    }
+
+    /**
+     * CompositeView is Deprecated. It extends CollectionView but it's API
+     * is different.
+     */
+    class CompositeView<TModel extends Backbone.Model> extends CollectionView<TModel> {
+
+        constructor(options?: CompositeViewOptions<TModel>);
+
+        // Select View Mixins
+        serializeModel(): any;
+        getTemplate(): any;
+        mixinTemplateContext(): any;
+        attachElContent(html: any): this;
+
+        /**
+         * Return the serialized model
+         */
+        serializeData(): any;
 
         /**
         * Renders the view.
         */
-        render(): CompositeView<TModel, TView>;
+        render(): this;
+
+        renderChildren(): void
 
         /**
-         * Invoked before the model has been rendered
+         * You might need to override this if you've overridden attachHtml
          */
-        onBeforeRenderTemplate(): void;
+        attachBuffer(compositeView: any, buffer: any): void;
 
         /**
-         * Invoked after the model has been rendered.
+         * Internal method to ensure an `$childViewContainer` exists, for the
+         * `attachHtml` method to use.
          */
-        onRenderTemplate(): void;
+        getChildViewContainer(containerView: any, childView: any): JQuery
 
         /**
-         * Invoked before the collection of models is rendered
+         * Internal method to reset the `$childViewContainer` on render
          */
-        onBeforeRenderCollection(): void;
-
-        /**
-         * Invoked after the collection of models has been rendered
-         */
-        onRenderCollection(): void;
+        resetChildViewContainer(): void
     }
 }
