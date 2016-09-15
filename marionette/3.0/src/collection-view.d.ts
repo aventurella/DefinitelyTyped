@@ -63,9 +63,14 @@ declare namespace Marionette{
         constructor(options?: CollectionViewOptions<TModel>);
 
         /**
-         * Specify a childView in your collection view definition. This must be a
-         * Backbone view object definition, not an instance. It can be any
-         * Backbone.View or be derived from Marionette.ItemView
+         * This can be a function or a class. Importantly, it can be a function
+         * that returns any class. The implication is that the underlying
+         * storage Container needs to store these views as genericly as possible
+         * You can see in the documentation here:
+         * https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md#collectionviews-childview
+         * that it can return a FooView or a BarView.
+         *
+         * It is this abaility that drove the type def choices for Container.
          */
         childView: ChildView<TModel>
 
