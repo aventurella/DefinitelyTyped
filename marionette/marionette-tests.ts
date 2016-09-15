@@ -1,4 +1,4 @@
-/// <reference path="./src/index.d.ts" />
+/// <reference path="./marionette.d.ts" />
 
 namespace Marionette.Tests {
     // class DestroyWarn extends Marionette.Behavior {
