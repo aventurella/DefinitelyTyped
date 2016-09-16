@@ -15,7 +15,7 @@ declare namespace Marionette{
         constructor(options?: any);
 
         getRegion(): Region;
-        showView(view: any, ...args: any[]);
+        showView(view: any, ...args: any[]): Region;
         getView(): Backbone.View<Backbone.Model>;
         start(options?: any): this;
     }
