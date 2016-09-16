@@ -42,8 +42,8 @@ declare namespace Marionette{
     }
 
     interface UIMixin{
-        normalizeUIKeys(hash: {[key: string]: string}): any;
-        normalizeUIValues(hash: {[key: string]: string}, properties: any)
+        normalizeUIKeys(hash: {[key: string]: string}): {[key: string]: string};
+        normalizeUIValues(hash: {[key: string]: string}, properties: any): {[key: string]: string};
     }
 
     interface ViewMixin{
