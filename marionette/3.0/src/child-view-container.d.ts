@@ -40,7 +40,7 @@ declare namespace Marionette {
         reject(iterator: (element: BaseView, index: number) => boolean, context?: any): BaseView[];
         rest(): BaseView;
         rest(n: number): BaseView[];
-        reduce(iterator: any, memo?: any, context?: any);
+        reduce(iterator: any, memo?: any, context?: any): any;
         select(iterator: any, context?: any): any[];
         some(iterator: (element: BaseView, index: number) => boolean, context?: any): boolean;
         toArray(): any[];

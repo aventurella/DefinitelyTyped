@@ -33,7 +33,7 @@ declare namespace Marionette{
         hasRegion(name: string): boolean;
         getRegion(name: string): Region;
         getRegions(): Region[];
-        showChildView(name: string, view: View<Backbone.Model>, ...args: any[]);
+        showChildView(name: string, view: View<Backbone.Model>, ...args: any[]): Region;
         getChildView<T extends View<Backbone.Model>>(name: string): T;
     }
 
@@ -42,8 +42,8 @@ declare namespace Marionette{
     }
 
     interface UIMixin{
-        normalizeUIKeys(hash: {[key: string]: string}): any;
-        normalizeUIValues(hash: {[key: string]: string}, properties: any)
+        normalizeUIKeys(hash: {[key: string]: string}): {[key: string]: string};
+        normalizeUIValues(hash: {[key: string]: string}, properties: any): {[key: string]: string};
     }
 
     interface ViewMixin{
