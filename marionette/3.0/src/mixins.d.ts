@@ -33,7 +33,7 @@ declare namespace Marionette{
         hasRegion(name: string): boolean;
         getRegion(name: string): Region;
         getRegions(): Region[];
-        showChildView(name: string, view: View<Backbone.Model>, ...args: any[]);
+        showChildView(name: string, view: View<Backbone.Model>, ...args: any[]): Region;
         getChildView<T extends View<Backbone.Model>>(name: string): T;
     }
 
