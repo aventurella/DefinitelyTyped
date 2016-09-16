@@ -3,7 +3,7 @@
 
 declare namespace Marionette{
     type NewableView<TModel extends Backbone.Model> = new (options?: any) => View<TModel> | CollectionView<TModel>;
-    type ChildView<TModel extends Backbone.Model> = View<TModel> | CollectionView<TModel> | ((TModel) => NewableView<TModel>);
+    type ChildView<TModel extends Backbone.Model> = View<TModel> | CollectionView<TModel> | ((TModel extends Backbone.Model) => NewableView<TModel>);
 
     interface CollectionViewOptions<TModel extends Backbone.Model> extends CollectionOptions<TModel> {
         behaviors?: any;
