@@ -4,18 +4,18 @@
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 /// <reference path="../../../backbone/backbone.d.ts" />
-/// <reference path="./application.d.ts" />
-/// <reference path="./app-router.d.ts" />
-/// <reference path="./behavior.d.ts" />
-/// <reference path="./child-view-container.d.ts" />
-/// <reference path="./collection-view.d.ts" />
-/// <reference path="./composite-view.d.ts" />
-/// <reference path="./error.d.ts" />
-/// <reference path="./mixins.d.ts" />
-/// <reference path="./object.d.ts" />
-/// <reference path="./region.d.ts" />
-/// <reference path="./template-cache.d.ts" />
-/// <reference path="./view.d.ts" />
+/// <reference path="application.d.ts" />
+/// <reference path="app-router.d.ts" />
+/// <reference path="behavior.d.ts" />
+/// <reference path="child-view-container.d.ts" />
+/// <reference path="collection-view.d.ts" />
+/// <reference path="composite-view.d.ts" />
+/// <reference path="error.d.ts" />
+/// <reference path="mixins.d.ts" />
+/// <reference path="object.d.ts" />
+/// <reference path="region.d.ts" />
+/// <reference path="template-cache.d.ts" />
+/// <reference path="view.d.ts" />
 
 
 declare namespace Marionette {
