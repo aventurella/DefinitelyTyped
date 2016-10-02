@@ -10,7 +10,6 @@ declare namespace Marionette{
         appRoutes?: any;
         controller?: any;
         routes?: any;
-        onRoute?: (name: string, path: string, ...args: any[]) => void;
     }
 
     /**
