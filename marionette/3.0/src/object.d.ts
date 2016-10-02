@@ -1,5 +1,3 @@
-/// <reference path="../../../backbone/backbone.d.ts" />
-
 declare namespace Marionette{
 
     interface ObjectOptions {
@@ -13,26 +11,36 @@ declare namespace Marionette{
      * backbone conventions and utilities like initialize and Backbone.Events.
      */
     class Object extends Backbone.Events implements CommonMixin, RadioMixin {
+        cidPrefix: string;
+        _isDestroyed: boolean;
+        isDestroyed(): boolean;
+
         /**
          * Initialize is called immediately after the Object has been instantiated,
          * and is invoked with the same arguments that the constructor received.
          */
         isDestroyed(): boolean
+        /**
+         * this is a noop method intended to be overridden by classes that extend from this base
+         */
         initialize(options?: ObjectOptions): void;
 
         // CommonMixins
         normalizeMethods(hash: string): {[key: string]: any};
+        _setOptions(...args: any[]):void
         mergeOptions(options: any, keys: any): any;
         getOption(optionName: string): any;
         bindEvents(entity: any, bindings: any): any
         unbindEvents(entity: any, bindings: any): any
 
         // RadioMixins
-        bindRequests(channel: any, bindings: any): any;
-        unbindRequests(channel: any, bindings: any): any;
+        _initRadio(): void;
+        _destroyRadio():void;
+        getChannel(): any;
         bindEvents(entity: any, bindings: any): any;
         unbindEvents(entity: any, bindings: any): any;
-        getChannel(): any;
+        bindRequests(channel: any, bindings: any): any;
+        unbindRequests(channel: any, bindings: any): any;
 
         triggerMethod(event: string, ...args: any[]): any;
         /**

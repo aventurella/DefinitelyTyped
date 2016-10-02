@@ -1,6 +1,3 @@
-/// <reference path="../../../backbone/backbone.d.ts" />
-
-
 declare namespace Marionette{
     type NewableView<TModel extends Backbone.Model> = new (options?: any) => View<TModel> | CollectionView<TModel>;
     type ChildView<TModel extends Backbone.Model> = View<TModel> | CollectionView<TModel> | ((TModel) => NewableView<TModel>);
@@ -55,12 +52,11 @@ declare namespace Marionette{
      * DOM. This behavior can be disabled by specifying {sort: false} on
      * initialize.
      */
-    class CollectionView<TModel extends Backbone.Model> extends Backbone.View<Backbone.Model> {
+    class CollectionView<TModel extends Backbone.Model> extends Backbone.View<Backbone.Model> implements ViewMixin{
         sort: boolean;
         viewComparator: any;
         filter: (child: TModel, index: number, collection: Backbone.Collection<TModel>) => boolean;
-
-        constructor(options?: CollectionViewOptions<TModel>);
+        _isBuffering: boolean;
 
         /**
          * This can be a function or a class. Importantly, it can be a function
@@ -88,13 +84,6 @@ declare namespace Marionette{
          * the object will be copied to the childView instance's options.
          */
         childViewOptions: (model: TModel, index: number) => any | any;
-
-        /**
-         * You can customize the event prefix for events that are forwarded through
-         * the collection view. To do this, set the childViewEventPrefix on the
-         * collection view.
-         */
-        childViewEventPrefix: string;
 
         /**
          * You can specify a childEvents hash or method which allows you to
@@ -128,6 +117,92 @@ declare namespace Marionette{
          */
         children: Container;
 
+        constructor(options?: CollectionViewOptions<TModel>);
+
+        // ViewMixin
+        // ViewMixin ins also BehaviorsMixin, CommonMixin,
+        // DelegateEntityEventsMixin, TriggersMixin, UIMixin
+        supportsRenderLifecycle: boolean;
+        supportsDestroyLifecycle: boolean;
+        _parent: any;
+        _isDestroyed: boolean;
+        isDestroyed(): boolean;
+        _isRendered: boolean;
+        isRendered(): boolean;
+        _isAttached: boolean;
+        isAttached(): boolean;
+        setElement(): this;
+        delegateEvents(eventsArg: any): this;
+        _getEvents(): any;
+        getTriggers(): any;
+        delegateEntityEvents(): this;
+        undelegateEntityEvents(): this;
+        _ensureViewIsIntact(): void;
+        destroy(...args: any[]): this;
+        bindUIElements(): this;
+        unbindUIElements(): this;
+        getUI(name: string): any;
+        childViewEventPrefix: string;
+        triggerMethod(event: string, ...args: any[]): any;
+        _buildEventProxies(): void;
+        _triggerEventOnParentLayout(eventName: string, ...args: any[]): void
+        _parentView(): any;
+
+        // ViewMixin.BehaviorsMixin
+        _initBehaviors(): void;
+        _getBehaviorTriggers(): any;
+        _getBehaviorEvents(): any;
+        _proxyBehaviorViewProperties(): void;
+        _delegateBehaviorEntityEvents(): void;
+        _undelegateBehaviorEntityEvents(): void;
+        _destroyBehaviors(): void;
+        _bindBehaviorUIElements(): void;
+        _unbindBehaviorUIElements(): void;
+        _triggerEventOnBehaviors(): void;
+
+        // ViewMixin.CommonMixin
+        normalizeMethods(hash: string): {[key: string]: any};
+        _setOptions(...args: any[]):void
+        mergeOptions(options: any, keys: any): any;
+        getOption(optionName: string): any;
+        bindEvents(entity: any, bindings: any): any
+        unbindEvents(entity: any, bindings: any): any
+
+        // ViewMixin.DelegateEntityEventsMixin
+        _delegateEntityEvents(model: any, collection: any): void
+        _undelegateEntityEvents(model: any, collection: any): void
+
+        // ViewMixin.TriggersMixin
+        _getViewTriggers(view: any, triggers: any): any
+
+        // ViewMixin.UIMixin
+        _ui: any;
+        normalizeUIKeys(hash: {[key: string]: string}): any;
+        normalizeUIValues(hash: {[key: string]: string}, properties: any)
+        _getUIBindings(): any
+        _bindUIElements(): void;
+        _unbindUIElements(): void;
+        _getUI(name: string): any;
+
+        /**
+         * Instead of inserting elements one by one into the page, it's much more performant to insert
+         * elements into a document fragment and then insert that document fragment into the page
+         */
+        _startBuffering(): void;
+        _endBuffering(): void;
+        _getImmediateChildren(): any;
+
+        /**
+         * Configured the initial events that the collection view binds to.
+         */
+        _initialEvents()
+
+         /**
+          * Handle a child added to the collection
+          */
+        _onCollectionAdd(child: any, collection: any, opts?: any): void;
+        _onCollectionRemove(model: any): void;
+
         /**
          * The render method of the collection view is responsible for rendering the
          * entire collection. It loops through each of the children in the collection
@@ -147,6 +222,11 @@ declare namespace Marionette{
         removeFilter(options: any): any;
 
         /**
+         * Calculate and apply difference by cid between `models` and `previousModels`.
+         */
+        _applyModelDeltas(models: any, previousModels: any): void;
+
+        /**
          * Reorder DOM after sorting. When your element's rendering do not use their index,
          * you can pass reorderOnSort: true to only reorder the DOM after a sort instead of
          * rendering all the collectionView.
@@ -159,7 +239,55 @@ declare namespace Marionette{
         */
         resortView(): this;
 
+        /**
+         * Internal method. This checks for any changes in the order of the collection.
+         * If the index of any view doesn't match, it will render.
+         */
+        _sortViews(): void;
+        /**
+         * Internal method. Separated so that CompositeView can append to the childViewContainer
+         * if necessary
+         */
+        _appendReorderedChildren(children: any): void;
+        _renderChildren(): void;
+        _showCollection(models: any): void;
+        _filteredSortedModels(addedAt: any): any;
+
         getViewComparator(): any;
+        _filterModels(models: any): any;
+        _sortModelsBy(models: any, comparator:any): any;
+
+        /**
+         * Internal method to show an empty view in place of a collection of child views,
+         * when the collection is empty
+         */
+        _showEmptyView(): void;
+
+        /**
+         * Internal method to destroy an existing emptyView instance if one exists. Called when
+         * a collection view has been rendered empty, and then a child is added to the collection.
+         */
+        _destroyEmptyView()
+
+        /**
+         * Retrieve the `childView` class
+         * The `childView` property can be either a view class or a function that
+         * returns a view class. If it is a function, it will receive the model that
+         * will be passed to the view instance (created from the returned view class)
+         */
+        _getChildView(child: any): any
+
+        /**
+         * First check if the `view` is a view class (the common case)
+         * Then check if it's a function (which we assume that returns a view class)
+         */
+        _getView(view: any, child: any): any;
+
+        /**
+         * Internal method for building and adding a child view
+         */
+        _addChild(child: any, ChildView: any, index: any): any
+        _getChildViewOptions(child: any, index: any): any;
 
         /**
          * Render the child's view and add it to the HTML for the collection view at a given index.
@@ -167,6 +295,8 @@ declare namespace Marionette{
          * children in sync with the collection.
         */
         addChildView(view: any, index: number): any;
+        _updateIndices(view: any, increment: any, index: any): void
+        _addChildView(view: any, index: any): void;
 
         /**
          * Build a `childView` for a model in the collection.
@@ -185,9 +315,63 @@ declare namespace Marionette{
         isEmpty(options: any): boolean;
 
         /**
+         * If empty, show the empty view
+         */
+        _checkEmpty(): void
+
+        /**
+         * You might need to override this if you've overridden attachHtml
+         */
+        attachBuffer(collectionView: any, buffer: any): void;
+
+        /**
+         * Create a fragment buffer from the currently buffered children
+         */
+        _createBuffer(): any;
+
+        /**
          * Append the HTML to the collection's `el`. Override this method to do something other
          * than `.append`.
         */
         attachHtml(collectionView: CollectionView<TModel>, childView: any, index: number): void
+
+        /**
+         * Internal method. Check whether we need to insert the view into the correct position.
+         */
+        _insertBefore(childView: any, index: any): boolean;
+
+        /**
+         * Internal method. Append a view to the end of the $el
+         */
+        _insertAfter(childView: any): void;
+
+        /**
+         * Internal method to set up the `children` object for storing all of the child views
+         */
+        _initChildViewStorage(): void;
+
+        /**
+         * called by ViewMixin destroy
+         */
+        _removeChildren(): void;
+
+        /**
+         * Destroy the child views that this collection view is holding on to, if any
+         */
+        _destroyChildren(options?: {checkEmpty: boolean}): any;
+
+        /**
+         * Return true if the given child should be shown. Return false otherwise.
+         * The filter will be passed (child, index, collection), where
+         *  'child' is the given model
+         *  'index' is the index of that model in the collection
+         *  'collection' is the collection referenced by this CollectionView
+         */
+        _shouldAddChild(child: any, index: any): boolean;
+
+        /**
+         * Set up the child view event forwarding. Uses a "childview:" prefix in front of all forwarded events.
+         */
+        _proxyChildEvents(view: any): void;
     }
 }

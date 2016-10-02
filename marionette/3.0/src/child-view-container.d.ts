@@ -1,6 +1,3 @@
-/// <reference path="../../../backbone/backbone.d.ts" />
-
-
 declare namespace Marionette {
     type BaseView = Marionette.View<Backbone.Model>
 
@@ -9,6 +6,7 @@ declare namespace Marionette {
         constructor(initialViews?: BaseView[]);
 
         add(view: BaseView, customIndex?: number): void;
+        _add(view: any, customIndex: any): this;
         findByModel<TModel extends Backbone.Model>(model: TModel): View<TModel>;
         findByModel(model: any): any;
         findByModelCid(modelCid: string): BaseView;
@@ -16,6 +14,8 @@ declare namespace Marionette {
         findByIndex(index: number): BaseView;
         findByCid(cid: string): BaseView;
         remove(view: BaseView): void;
+        _remove(view: any): this;
+        _updateLength(): this;
 
         // mixins from underscore (copied from underscore)
         all(iterator: (element: BaseView, index: number) => boolean, context?: any): boolean;

@@ -1,5 +1,3 @@
-/// <reference path="./object.d.ts" />
-
 declare namespace Marionette{
 
     interface BehaviorOptions{
@@ -28,9 +26,40 @@ declare namespace Marionette{
 
         constructor(options?: any, view?: any);
 
+        // DelegateEntityEventsMixin
+        _delegateEntityEvents(model: any, collection: any): void
+        _undelegateEntityEvents(model: any, collection: any): void
+
+        // TriggersMixin
+        _getViewTriggers(view: any, triggers: any): any
+
+        // BehaviorsMixin
+        _initBehaviors(): void;
+        _getBehaviorTriggers(): any;
+        _getBehaviorEvents(): any;
+        _proxyBehaviorViewProperties(): void;
+        _delegateBehaviorEntityEvents(): void;
+        _undelegateBehaviorEntityEvents(): void;
+        _destroyBehaviors(): void;
+        _bindBehaviorUIElements(): void;
+        _unbindBehaviorUIElements(): void;
+        _triggerEventOnBehaviors(): void;
+
         // UIMixin
+        _ui: any;
+
         normalizeUIKeys(hash: {[key: string]: string}): any;
         normalizeUIValues(hash: {[key: string]: string}, properties: any)
+        _getUIBindings(): any
+
+        /**
+         * This method binds the elements specified in the "ui" hash inside
+         * the view's code with the associated jQuery selectors.
+         */
+        _bindUIElements(): void;
+        _unbindUIElements(): void;
+        _getUI(name: string): any;
+
 
         /**
          * $ is a direct proxy of the views $ lookup method.

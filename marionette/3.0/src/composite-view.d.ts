@@ -1,7 +1,3 @@
-/// <reference path="../../../backbone/backbone.d.ts" />
-
-
-
 declare namespace Marionette{
     interface CompositeViewOptions<TModel extends Backbone.Model> extends CollectionOptions<TModel> {
         childViewContainer: any;

@@ -1,10 +1,16 @@
-/// <reference path="../../../backbone/backbone.d.ts" />
-
 declare namespace Marionette{
 
-    interface AppRouterOptions extends Backbone.RouterOptions {
+    /**
+     * This was previously Extended from Backbone.RouterOptions
+     * but that requires `routes`. Marionette's AppRouter does not
+     * but it still forwards it's args into Backbone's Router. So
+     * we just make it optional.
+     */
+    interface AppRouterOptions {
         appRoutes?: any;
         controller?: any;
+        routes?: any;
+        onRoute?: (name: string, path: string, ...args: any[]) => void;
     }
 
     /**
@@ -26,6 +32,7 @@ declare namespace Marionette{
 
         // CommonMixins
         normalizeMethods(hash: string): {[key: string]: any};
+        _setOptions(...args: any[]):void
         mergeOptions(options: any, keys: any): any;
         getOption(optionName: string): any;
         bindEvents(entity: any, bindings: any): any

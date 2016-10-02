@@ -61,19 +61,12 @@ declare namespace Marionette {
      * views in the correct place.
      */
     class Region extends Marionette.Object {
-
+        cidPrefix: string;
+        replaceElement: boolean;
+        _isReplaced: boolean;
         el: any;
         $el: any;
         currentView: Backbone.View<Backbone.Model>;
-
-        /**
-         * Build an instance of a region by passing in a configuration object and
-         * a default region class to use if none is specified in the config.
-         * The config object should either be a string as a jQuery DOM selector,
-         * a Region class directly, or an object literal that specifies a selector,
-         * a custom regionClass, and any options to be supplied to the region
-         */
-        static buildRegion(regionConfig: any, defaultRegionType: any): Region;
 
         /**
          * You can specify an el for the region to manage at the time the region
@@ -82,12 +75,27 @@ declare namespace Marionette {
         constructor(options?: RegionOptions);
 
         /**
-         * Renders and displays the specified view in this region.
-         * @param view the view to display.
+         * Displays a backbone view instance inside of the region. Handles calling the `render`
+         * method for you. Reads content directly from the `el` attribute. The `preventDestroy`
+         * option can be used to prevent a view from the old view being destroyed on show.
          */
         show<TModel extends Backbone.Model>(view: Backbone.View<TModel>, options?: RegionShowOptions): this;
+        _renderView(view: any): void;
+        _attachView(view: any, options?: any): any;
+        _ensureElement(options?: any): boolean;
+        _ensureView(view): void;
 
+        /**
+         * Override this method to change how the region finds the DOM element that it manages. Return
+         * a jQuery selector object scoped to a provided parent el or the document if none exists.
+         */
         getEl(el: any): any;
+
+        _replaceEl(view): void;
+        /**
+         * Restore the region's element in the DOM.
+         */
+        _restoreEl(): void;
 
         /**
          * Check to see if the region's el was replaced.
@@ -104,8 +112,10 @@ declare namespace Marionette {
          * Destroy the current view, if there is one. If there is no current view, it does
          * nothing and returns immediately.
          */
-        empty(options: { allowMissingEl: boolean }): this;
+        empty(options?: { allowMissingEl: boolean }): this;
 
+        _removeView(view: any, options?: {preventDestroy: boolean}): void;
+        _detachView(view: any): void;
         /**
          * Override this method to change how the region detaches current content
          */
@@ -123,8 +133,8 @@ declare namespace Marionette {
          * The next time a view is shown via this region, the region will re-query the DOM for
          * the region's `el`.
          */
-        reset(options: any): this;
+        reset(options?: any): this;
 
-        destroy(options: any): any
+        destroy(options?: any): any
     }
 }
